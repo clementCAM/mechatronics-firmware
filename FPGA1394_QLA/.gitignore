@@ -44,7 +44,6 @@
 /*.par
 /*.cfi
 /*.prj
-/ipcore_dir
 /xlnx*
 /iseconfig
 /*.gist
@@ -56,3 +55,4 @@
 /Wave
 /*.prm
 /*.xmsgs
+

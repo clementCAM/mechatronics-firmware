@@ -81,6 +81,9 @@ assign reset_phy = 1'b1;    // 1394 phy low reset, never reset
 
 // phy-link interface
 wire rx_active;
+wire[5:0] node_id_debug;
+wire st_rx_d_debug;
+wire st_rx_debug;
 PhyLinkInterface phy(
     sysclk, reset, ~wenid,    // in: global clock, reset, board id
     ctl, data,                // bi: phy ctl and data lines
@@ -88,7 +91,10 @@ PhyLinkInterface phy(
     reg_addr,                 // out: register write signal/address
     reg_rdata, reg_wdata,     // out/in: register read address/data
     lreq_trig, lreq_type,     // out: phy request trigger and type
-    rx_active                 // out: for debugging
+    rx_active,                // out: for debugging
+    node_id_debug,            // out: dest node id for debugging
+    st_rx_d_debug,
+    st_rx_debug               // out: st_rx_debug for debugging
 );
 
 // phy request module
@@ -344,17 +350,22 @@ always @(posedge(sysclk)) CountI <= CountI + 1'b1;
 
 // assign LED = IO1[32];     // NOTE: IO1[32] pwr_enable
 assign LED = reg_led;
+//assign LED = st_rx_debug;
 assign DEBUG = { clk_1mhz, clk_12hz, CountI[23], CountC[23] };
 assign TxD = 0;
 
+
+// st_rx_d_debug
+// st_rx_debug
+
 reg reg_led;
-reg[4:0] reg_led_counter;
-always @(posedge(rx_active) or posedge(clk_12hz)) begin
-    if (rx_active == 1'b1) begin
+reg[31:0] reg_led_counter;
+always @(posedge(reg_wen) or posedge(clk_1mhz)) begin
+    if (reg_wen == 1'b1) begin
         reg_led_counter <= 0;
-        reg_led <= 1'b1;
+//        reg_led <= 1'b1;
     end
-    else if (reg_led_counter <= 5'd30) begin
+    else if (reg_led_counter <= 32'd100000) begin  // 100 ms
         reg_led_counter <= reg_led_counter + 1;
         reg_led <= 1'b1;
     end
@@ -363,17 +374,75 @@ always @(posedge(rx_active) or posedge(clk_12hz)) begin
     end
 end
 
+reg rx_led;
+reg[31:0] rx_led_counter;
+always @(posedge(st_rx_debug) or posedge(clk_1mhz)) begin
+    if (st_rx_debug == 1'b1) begin
+        rx_led_counter <= 0;
+    end
+    else if (rx_led_counter <= 32'd100000) begin
+        rx_led_counter <= rx_led_counter + 1;
+        rx_led <= 1'b1;
+    end
+    else begin
+        rx_led <= 1'b0;
+    end
+end
+
+reg rx_d_led;
+reg[31:0] rx_d_led_counter;
+always @(posedge(st_rx_d_debug) or posedge(clk_1mhz)) begin
+    if (st_rx_d_debug == 1'b1) begin
+        rx_d_led_counter <= 0;
+    end
+    else if (rx_d_led_counter <= 32'd100000) begin
+        rx_d_led_counter <= rx_d_led_counter + 1;
+        rx_d_led <= 1'b1;
+    end
+    else begin
+        rx_d_led <= 1'b0;
+    end
+end
+
 
 //------------------------------------------------------------------------------
 // LEDs on QLA 
-CtrlLED qla_led(
-    .sysclk(sysclk),
-    .clk_12hz(clk_12hz),
-    .reset(reset),
-    .led1_grn(IO2[1]),
-    .led1_red(IO2[3]),
-    .led2_grn(IO2[5]),
-    .led2_red(IO2[7])
+//CtrlLED qla_led(
+//    .sysclk(sysclk),
+//    .clk_12hz(clk_12hz),
+//    .reset(reset),
+//    .led1_grn(IO2[1]),
+//    .led1_red(IO2[3]),
+//    .led2_grn(IO2[5]),
+//    .led2_red(IO2[7])
+//);
+//assign IO2[1] = node_id_debug[0];
+//assign IO2[3] = node_id_debug[1];
+//assign IO2[5] = node_id_debug[2];
+//assign IO2[7] = node_id_debug[3];
+
+assign IO2[1] = rx_led;
+assign IO2[3] = 0;
+assign IO2[5] = rx_d_led;
+assign IO2[7] = 0;
+
+
+
+//--------------------------------------------------------------
+// Debug: chipscope modules 
+//   icon: integrated controller
+//    ila: integrated logic analyzer
+
+wire[35:0] control0;
+
+chipscope_icon icon1(
+    .CONTROL0(control0)
+);
+
+chipscope_ila ila1(
+    .CONTROL(control0),
+    .CLK(sysclk),
+    .TRIG0(reg_addr)
 );
 
 endmodule

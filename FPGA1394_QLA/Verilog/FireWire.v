@@ -70,6 +70,7 @@
 `define TC_BREAD 4'd5             // block read
 `define TC_QRESP 4'd6             // quadlet read response
 `define TC_BRESP 4'd7             // block read response
+`define TC_CSTART 4'd8            // cycle start packet
 `define RC_DONE 4'd0              // complete response code
 
 // ack values
@@ -116,7 +117,10 @@ module PhyLinkInterface(
     output reg[2:0] lreq_type,   // type of request to give to the phy
     
     // ZC: debug only 
-    output rx_active
+    output rx_active,
+    output reg[5:0] node_id_debug,      // phy node id register for debugging
+    output reg st_rx_d_debug,           // indicate st_rx_d state for debugging ONLY
+    output reg st_rx_debug              // indicate st_rx state for debugging ONLY
 );
 
 
@@ -185,6 +189,15 @@ module PhyLinkInterface(
     reg ts_reset;                 // timestamp counter reset signal
     reg data_block;               // flag for block write data being received
 
+    // register for debugging
+    reg[191:0] fw_packet_debug;   // save fw packet for debugging (chipscope)
+
+
+    // -------------------------------------------------------------------------
+    // parameters
+    //
+    
+    // number of channels for QLA channels = 4
     parameter num_channels = 4;
 
     // state machine states
@@ -281,10 +294,16 @@ begin
         crc_tx <= 0;              // flag for crc; 0=non-transmit state
         ts_reset <= 0;            // clear the timestamp reset signal
         data_block <= 0;          // indicates data portion of block writes
+        
+        node_id_debug <= 0;       // node_id_debug init debug only
+        st_rx_d_debug <= 0;    
+        st_rx_debug <= 0;
+        fw_packet_debug <= 192'd0;  // initialize packet to 0 
     end
 
     // phy-link state machine
     else begin
+    
         case (state)
 
         /***********************************************************************
@@ -293,6 +312,9 @@ begin
 
         ST_IDLE:
         begin
+            st_rx_d_debug <= 0;        // debug: set to 0
+            st_rx_debug <= 0;          // debug: set to 0 
+        
             blk_wstart <= 0;                       // block write not started
             reg_wen <= 0;                          // no register write events
             blk_wen <= 0;                          // no block write events
@@ -367,6 +389,9 @@ begin
         // Ctrl: 00b 01b 01b 01b 01b   01b   01b   01b   01b ....   01b 00b 00b
         ST_RX_D_ON:
         begin
+            st_rx_d_debug <= 0;        // debug: set to 1
+            st_rx_debug <= 0;          // debug: set to 0 
+        
             // wait out data-on until data RX starts (or null packet indicated)
             case ({data[0], ctl})
                 3'b101: state <= ST_RX_D_ON;        // loop in data-on state
@@ -388,6 +413,7 @@ begin
         //
         ST_RX_DATA:
         begin
+        
             // receive data from phy until phy indicates completion
             case (ctl)
 
@@ -442,10 +468,11 @@ begin
                             rx_dest <= buffer[31:16];     // destination addr
                             rx_tag <= buffer[15:10];      // transaction tag
                             rx_tcode <= buffer[7:4];      // transaction code
-
+                            
                             // trigger an ack if dest address matches us
                             if (buffer[21:16] == node_id) begin
                                 rx_active <= 1;
+                                node_id_debug[5:0] <= buffer[21:16];  // dest node id for debug
                                 case (buffer[7:4])
                                     // quadlet read
                                     `TC_QREAD: begin
@@ -471,16 +498,31 @@ begin
                                         lreq_type <= `LREQ_TX_IMM;
                                         tx_type <= `TX_TYPE_DONE;
                                     end
-                                endcase
+                                endcase  // tcode cas
+                            end  // dest_node_id = node_id
+                            
+                            // ignore cycle start packet
+                            else if (rx_tcode == `TC_CSTART) begin
+                                rx_active <= 0;
+                                lreq_trig <= 0;
+                                lreq_type <= `LREQ_RES;
+                                tx_type <= `TX_TYPE_DATA;                            
                             end
+                            
                             // nodeid = b111111 is broadcast message 
                             // no response
-//                            else if (buffer[21:16] == 6'b111111) begin
-//                                rx_active <= 1; 
-//                                lreq_trig <= 0;
-//                                lreq_type <= `LREQ_RES;
-//                                tx_type <= `TX_TYPE_DATA;
-//                            end
+                            else if ((buffer[21:16] == 6'b111111) && (rx_tcode == `TC_QWRITE)) begin
+                                if (rx_speed == `RX_S100) begin
+                                    st_rx_d_debug <= 1;
+                                end
+                                st_rx_debug <= 1;
+                                rx_active <= 1; 
+                                lreq_trig <= 0;
+                                lreq_type <= `LREQ_RES;
+                                tx_type <= `TX_TYPE_DATA;
+                            end
+                            
+                            // otherwise ignore
                             else begin
                                 rx_active <= 0;
                                 lreq_trig <= 0;
@@ -540,13 +582,13 @@ begin
                             lreq_trig <= 0;    // keep lreq untriggered
                             crc_ini <= 0;      // start crc for block data
                         end
-                    endcase
+                    endcase  // on the fly processing
 
                     // ---------------------------------------------------------
                     // buffer and count data bits from the phy
                     //
                     case (rx_speed)
-                        `RX_S100: begin
+                        `RX_S100: begin                            
                             buffer <= buffer << 2;
                             buffer[1:0] <= data2b;
                             count <= count + 16'd2;
@@ -572,7 +614,7 @@ begin
                             // - increment bit counter by (2,4,8)
                             // - feed back new crc for next iteration
                         end
-                    endcase
+                    endcase  // rx_speed
                 end
 
                 // -------------------------------------------------------------
@@ -588,8 +630,12 @@ begin
                         tx_type <= `TX_TYPE_DATA;
 
                     // trigger a quadlet or block write event
-                    reg_wen <= (rx_active & (rx_tcode==`TC_QWRITE));
-                    blk_wen <= (rx_active & (rx_tcode==`TC_QWRITE) | (rx_tcode==`TC_BWRITE));
+                    reg_wen <= (rx_active && (rx_tcode==`TC_QWRITE));
+                    blk_wen <= (rx_active && ((rx_tcode==`TC_QWRITE) | (rx_tcode==`TC_BWRITE)));
+                    
+//                    if (rx_tcode == `TC_QWRITE) begin
+//                        st_rx_d_debug <= 1;
+//                    end
                 end
 
                 // -------------------------------------------------------------
@@ -598,7 +644,7 @@ begin
                 default: state <= ST_IDLE;
 
             endcase
-        end
+        end   // ST_RX_DATA
 
 
         /***********************************************************************
@@ -878,7 +924,7 @@ begin
 
         endcase
     end
-end
+end  // llc state machine
 
 endmodule  // PhyLinkInterface
 

@@ -1,0 +1,263 @@
+Release 13.4 Map O.87xd (lin64)
+Xilinx Mapping Report File for Design 'chipscope_icon'
+
+Design Information
+------------------
+Command Line   : map -intstyle ise -p xc6slx45-fgg484-3 -w -logic_opt off -ol
+high -t 1 -xt 0 -register_duplication off -r 4 -global_opt off -mt off -ir off
+-pr off -lc off -power off -o chipscope_icon_map.ncd chipscope_icon.ngd
+chipscope_icon.pcf 
+Target Device  : xc6slx45
+Target Package : fgg484
+Target Speed   : -3
+Mapper Version : spartan6 -- $Revision: 1.55 $
+Mapped Date    : Wed Aug 28 21:38:52 2013
+
+Design Summary
+--------------
+Number of errors   :   2
+Number of warnings :  33
+
+Section 1 - Errors
+------------------
+ERROR:MapLib:979 - LUT6 symbol
+   "U0/U_ICON/U_TDO_MUX/U_CS_MUX/I4.U_MUX16/Mmux_O11" (output
+   signal=U0/U_ICON/iTDO_next) has input signal "CONTROL0<3>" which will be
+   trimmed. See Section 5 of the Map Report File for details about why the input
+   signal will become undriven.
+ERROR:MapLib:978 - LUT6 symbol
+   "U0/U_ICON/U_TDO_MUX/U_CS_MUX/I4.U_MUX16/Mmux_O11" (output
+   signal=U0/U_ICON/iTDO_next) has an equation that uses input pin I4, which no
+   longer has a connected signal. Please ensure that all the pins used in the
+   equation for this LUT have signals that are not trimmed (see Section 5 of the
+   Map Report File for details on which signals were trimmed).
+
+Section 2 - Warnings
+--------------------
+WARNING:MapLib:701 - Signal CONTROL0<20> connected to top level port
+   CONTROL0<20> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<4> connected to top level port CONTROL0<4>
+   has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<21> connected to top level port
+   CONTROL0<21> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<5> connected to top level port CONTROL0<5>
+   has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<22> connected to top level port
+   CONTROL0<22> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<6> connected to top level port CONTROL0<6>
+   has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<23> connected to top level port
+   CONTROL0<23> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<7> connected to top level port CONTROL0<7>
+   has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<24> connected to top level port
+   CONTROL0<24> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<8> connected to top level port CONTROL0<8>
+   has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<25> connected to top level port
+   CONTROL0<25> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<9> connected to top level port CONTROL0<9>
+   has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<26> connected to top level port
+   CONTROL0<26> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<10> connected to top level port
+   CONTROL0<10> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<27> connected to top level port
+   CONTROL0<27> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<11> connected to top level port
+   CONTROL0<11> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<28> connected to top level port
+   CONTROL0<28> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<12> connected to top level port
+   CONTROL0<12> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<29> connected to top level port
+   CONTROL0<29> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<13> connected to top level port
+   CONTROL0<13> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<30> connected to top level port
+   CONTROL0<30> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<14> connected to top level port
+   CONTROL0<14> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<31> connected to top level port
+   CONTROL0<31> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<15> connected to top level port
+   CONTROL0<15> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<32> connected to top level port
+   CONTROL0<32> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<16> connected to top level port
+   CONTROL0<16> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<33> connected to top level port
+   CONTROL0<33> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<17> connected to top level port
+   CONTROL0<17> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<34> connected to top level port
+   CONTROL0<34> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<18> connected to top level port
+   CONTROL0<18> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<35> connected to top level port
+   CONTROL0<35> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<19> connected to top level port
+   CONTROL0<19> has been removed.
+WARNING:MapLib:701 - Signal CONTROL0<3> connected to top level port CONTROL0<3>
+   has been removed.
+
+Section 3 - Informational
+-------------------------
+INFO:LIT:243 - Logical network CONTROL0<35> has no load.
+INFO:LIT:395 - The above info message is repeated 31 more times for the
+   following (max. 5 shown):
+   CONTROL0<34>,
+   CONTROL0<33>,
+   CONTROL0<32>,
+   CONTROL0<31>,
+   CONTROL0<30>
+   To see the details of these info messages, please use the -detail switch.
+INFO:MapLib:562 - No environment variables are currently set.
+
+Section 4 - Removed Logic Summary
+---------------------------------
+  64 block(s) removed
+   2 block(s) optimized away
+  51 signal(s) removed
+
+Section 5 - Removed Logic
+-------------------------
+
+The trimmed logic report below shows the logic removed from your design due to
+sourceless or loadless signals, and VCC or ground connections.  If the removal
+of a signal or symbol results in the subsequent removal of an additional signal
+or symbol, the message explaining that second removal will be indented.  This
+indentation will be repeated as a chain of related logic is removed.
+
+To quickly locate the original cause for the removal of a chain of logic, look
+above the place where that logic is listed in the trimming report, then locate
+the lines that are least indented (begin at the leftmost edge).
+
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[10].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[11].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[12].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[13].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[14].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[1].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[2].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[3].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[4].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[5].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[6].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[7].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[8].U_LUT" (ROM) removed.
+Loadless block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[9].U_LUT" (ROM) removed.
+The signal "CONTROL0<3>" is sourceless and has been removed.
+
+The trimmed logic reported below is either:
+   1. part of a cycle
+   2. part of disabled logic
+   3. a side-effect of other trimmed logic
+
+The signal "CONTROL0<35>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[15].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<15>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[15].U_LUT" (ROM) removed.
+  The signal "U0/U_ICON/iCORE_ID_SEL<0>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_CORE_ID_SEL/I4.FI[0].U_LUT" (ROM) removed.
+  The signal "U0/U_ICON/U_CTRL_OUT/iCOMMAND_GRP_SEL<1>" is unused and has been
+removed.
+   Unused block "U0/U_ICON/U_CTRL_OUT/U_CMDGRP1" (ROM) removed.
+The signal "CONTROL0<34>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[14].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<14>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[14].U_LUT" (ROM) removed.
+The signal "CONTROL0<33>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[13].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<13>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[13].U_LUT" (ROM) removed.
+The signal "CONTROL0<32>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[12].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<12>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[12].U_LUT" (ROM) removed.
+The signal "CONTROL0<31>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[11].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<11>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[11].U_LUT" (ROM) removed.
+The signal "CONTROL0<30>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[10].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<10>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[10].U_LUT" (ROM) removed.
+The signal "CONTROL0<29>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[9].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<9>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[9].U_LUT" (ROM) removed.
+The signal "CONTROL0<28>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[8].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<8>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[8].U_LUT" (ROM) removed.
+The signal "CONTROL0<27>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[7].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<7>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[7].U_LUT" (ROM) removed.
+The signal "CONTROL0<26>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[6].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<6>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[6].U_LUT" (ROM) removed.
+The signal "CONTROL0<25>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[5].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<5>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[5].U_LUT" (ROM) removed.
+The signal "CONTROL0<24>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[4].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<4>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[4].U_LUT" (ROM) removed.
+The signal "CONTROL0<23>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[3].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<3>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[3].U_LUT" (ROM) removed.
+The signal "CONTROL0<22>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[2].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<2>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[2].U_LUT" (ROM) removed.
+The signal "CONTROL0<21>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[1].U_HCE" (ROM) removed.
+  The signal "U0/U_ICON/iCOMMAND_SEL<1>" is unused and has been removed.
+   Unused block "U0/U_ICON/U_CMD/U_COMMAND_SEL/I4.FI[1].U_LUT" (ROM) removed.
+The signal "CONTROL0<20>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[0].U_HCE" (ROM) removed.
+The signal "CONTROL0<19>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[15].U_LCE" (ROM) removed.
+  The signal "U0/U_ICON/U_CTRL_OUT/iCOMMAND_GRP_SEL<0>" is unused and has been
+removed.
+   Unused block "U0/U_ICON/U_CTRL_OUT/U_CMDGRP0" (ROM) removed.
+The signal "CONTROL0<18>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[14].U_LCE" (ROM) removed.
+The signal "CONTROL0<17>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[13].U_LCE" (ROM) removed.
+The signal "CONTROL0<16>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[12].U_LCE" (ROM) removed.
+The signal "CONTROL0<15>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[11].U_LCE" (ROM) removed.
+The signal "CONTROL0<14>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[10].U_LCE" (ROM) removed.
+The signal "CONTROL0<13>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[9].U_LCE" (ROM) removed.
+The signal "CONTROL0<12>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[8].U_LCE" (ROM) removed.
+The signal "CONTROL0<11>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[7].U_LCE" (ROM) removed.
+The signal "CONTROL0<10>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[6].U_LCE" (ROM) removed.
+The signal "CONTROL0<9>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[5].U_LCE" (ROM) removed.
+The signal "CONTROL0<8>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[4].U_LCE" (ROM) removed.
+The signal "CONTROL0<7>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[3].U_LCE" (ROM) removed.
+The signal "CONTROL0<6>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[2].U_LCE" (ROM) removed.
+The signal "CONTROL0<5>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[1].U_LCE" (ROM) removed.
+The signal "CONTROL0<4>" is unused and has been removed.
+ Unused block "U0/U_ICON/U_CTRL_OUT/F_NCP[0].F_CMD[0].U_LCE" (ROM) removed.
+
+Optimized Block(s):
+TYPE 		BLOCK
+GND 		XST_GND
+VCC 		XST_VCC

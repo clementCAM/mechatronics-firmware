@@ -1,0 +1,20 @@
+#ChipScope Pro Analyzer Project File, Version 3.0
+#Wed Aug 28 22:54:44 EDT 2013
+device.0.configFileDir=/home/zihan/dev/mechatronics/firmware/FPGA1394_QLA/Chipscope
+device.0.configFilename=
+device.0.inserterCDCFileDir=/home/zihan/dev/mechatronics/firmware/FPGA1394_QLA/Chipscope
+device.0.inserterCDCFilename=
+deviceChain.deviceName0=XC6SLX45
+deviceChain.iRLength0=6
+deviceChain.name0=FPGA-QLA
+deviceIds=44008093
+mdiAreaHeight=0.7
+mdiAreaHeightLast=0.7
+mdiCount=0
+navigatorHeight=0.18
+navigatorHeightLast=0.18
+navigatorWidth=0.17926734216679657
+navigatorWidthLast=0.17926734216679657
+signalDisplayPath=0
+unit.-1.-1.username=
+unit.0.-1.username=
