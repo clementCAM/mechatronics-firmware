@@ -1,4 +1,5 @@
 # Output products list for <chipscope_icon>
+_xmsgs/pn_parser.xmsgs
 chipscope_icon.asy
 chipscope_icon.ejp
 chipscope_icon.gise

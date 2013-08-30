@@ -390,7 +390,8 @@ begin
         ST_RX_D_ON:
         begin
             st_rx_d_debug <= 0;        // debug: set to 1
-            st_rx_debug <= 0;          // debug: set to 0 
+            st_rx_debug <= 0;          // debug: set to 0
+            fw_packet_debug <= 192'd0; // debug: clear packet at RX_D_ON
         
             // wait out data-on until data RX starts (or null packet indicated)
             case ({data[0], ctl})
@@ -459,12 +460,18 @@ begin
                             crc_comp <= ~crc_in;
                     end // if (data_block)
 
+
                     // ---------------------------------------------------------
                     // on-the-fly packet processing at 32-bit boundaries
                     //
                     case (count)
                         // first quadlet received ------------------------------
                         32: begin
+                            // debug
+                            fw_packet_debug <= fw_packet_debug << 32;
+                            fw_packet_debug[31:0] <= buffer[31:0];
+                            node_id_debug[5:0] <= buffer[21:16];  // dest node id for debug
+                        
                             rx_dest <= buffer[31:16];     // destination addr
                             rx_tag <= buffer[15:10];      // transaction tag
                             rx_tcode <= buffer[7:4];      // transaction code
@@ -472,7 +479,6 @@ begin
                             // trigger an ack if dest address matches us
                             if (buffer[21:16] == node_id) begin
                                 rx_active <= 1;
-                                node_id_debug[5:0] <= buffer[21:16];  // dest node id for debug
                                 case (buffer[7:4])
                                     // quadlet read
                                     `TC_QREAD: begin
@@ -502,7 +508,7 @@ begin
                             end  // dest_node_id = node_id
                             
                             // ignore cycle start packet
-                            else if (rx_tcode == `TC_CSTART) begin
+                            else if (buffer[7:4] == `TC_CSTART) begin
                                 rx_active <= 0;
                                 lreq_trig <= 0;
                                 lreq_type <= `LREQ_RES;
@@ -511,7 +517,7 @@ begin
                             
                             // nodeid = b111111 is broadcast message 
                             // no response
-                            else if ((buffer[21:16] == 6'b111111) && (rx_tcode == `TC_QWRITE)) begin
+                            else if ((buffer[21:16] == 6'b111111) && (buffer[7:4] == `TC_QWRITE)) begin
                                 if (rx_speed == `RX_S100) begin
                                     st_rx_d_debug <= 1;
                                 end
@@ -532,15 +538,27 @@ begin
                         end
                         // second quadlet --------------------------------------
                         64: begin
+                            // debug
+                            fw_packet_debug <= fw_packet_debug << 32;
+                            fw_packet_debug[31:0] <= buffer[31:0];     
+                        
                             rx_src <= buffer[31:16];      // source address
                         end
                         // third quadlet --------------------------------------
                         96: begin
+                            // debug
+                            fw_packet_debug <= fw_packet_debug << 32;
+                            fw_packet_debug[31:0] <= buffer[31:0];                            
+                            
                             reg_addr <= buffer[7:0];      // register address
                             crc_comp <= ~crc_in;          // computed crc for quadlet read
                         end
                         // fourth quadlet --------------------------------------
                         128: begin
+                            // debug
+                            fw_packet_debug <= fw_packet_debug << 32;
+                            fw_packet_debug[31:0] <= buffer[31:0];                              
+                        
                             reg_dlen <= buffer[31:16];    // block data length
                             reg_wdata <= buffer[31:0];    // reg write data
 
@@ -563,6 +581,10 @@ begin
                         144: crc_ini <= 1;     // reset crc for block data
                         // for block write packets, data block starts ----------
                         160: begin
+                            // debug
+                            fw_packet_debug <= fw_packet_debug << 32;
+                            fw_packet_debug[31:0] <= buffer[31:0];                              
+                        
                             // flag to indicate the start of block data
                             data_block <= (rx_tcode==`TC_BWRITE) ? 1'b1 : 1'b0;
                             blk_wstart <= (rx_tcode==`TC_BWRITE) ? 1'b1 : 1'b0;
@@ -633,9 +655,6 @@ begin
                     reg_wen <= (rx_active && (rx_tcode==`TC_QWRITE));
                     blk_wen <= (rx_active && ((rx_tcode==`TC_QWRITE) | (rx_tcode==`TC_BWRITE)));
                     
-//                    if (rx_tcode == `TC_QWRITE) begin
-//                        st_rx_d_debug <= 1;
-//                    end
                 end
 
                 // -------------------------------------------------------------
@@ -925,6 +944,56 @@ begin
         endcase
     end
 end  // llc state machine
+
+
+//--------------------------------------------------------------
+// Debug: chipscope modules 
+//   - icon: integrated controller
+//   -  ila: integrated logic analyzer
+// 
+
+wire[35:0] control0;
+wire[35:0] control1;
+wire[35:0] control2;
+
+// icon
+chipscope_icon icon1(
+    .CONTROL0(control0),
+    .CONTROL1(control1),
+    .CONTROL2(control2)
+);
+
+// ila connect to packet buffer
+chipscope_ila ila1(
+    .CONTROL(control0),
+    .CLK(sysclk),
+    .TRIG0(reg_addr)
+);
+
+// ila to monitor fw packet
+ila_fw_packet ila_packet(
+    .CONTROL(control1),
+    .CLK(sysclk),
+    .DATA(fw_packet_debug),
+    .TRIG0(rx_speed),
+    .TRIG1(rx_tcode),
+    .TRIG2(node_id_debug),
+    .TRIG3(count)
+);
+
+// ila connected to phy_ctl pins
+wire[7:0] active_tcode_debug;
+assign active_tcode_debug = {2'b00, reg_wen, rx_active, rx_tcode[3:0]};
+
+ila_ctl ila_ctl_1(
+    .CONTROL(control2),
+    .CLK(sysclk),
+    .TRIG0(rx_speed),
+    .TRIG1(active_tcode_debug),
+    .TRIG2(node_id_debug),
+    .TRIG3(ctl),
+    .TRIG4(state)
+);
 
 endmodule  // PhyLinkInterface
 

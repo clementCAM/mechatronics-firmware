@@ -7,8 +7,8 @@
 // /___/  \  /    Vendor     : Xilinx
 // \   \   \/     Version    : 13.4
 //  \   \         Application: Xilinx CORE Generator
-//  /   /         Filename   : chipscope_icon.v
-// /___/   /\     Timestamp  : Thu Aug 29 16:44:36 EDT 2013
+//  /   /         Filename   : ila_fw_packet.v
+// /___/   /\     Timestamp  : Thu Aug 29 01:35:46 EDT 2013
 // \   \  /  \
 //  \___\/\___\
 //
@@ -18,14 +18,22 @@
 
 `timescale 1ns/1ps
 
-module chipscope_icon(
-    CONTROL0,
-    CONTROL1,
-    CONTROL2);
+module ila_fw_packet(
+    CONTROL,
+    CLK,
+    DATA,
+    TRIG0,
+    TRIG1,
+    TRIG2,
+    TRIG3);
 
 
-inout [35 : 0] CONTROL0;
-inout [35 : 0] CONTROL1;
-inout [35 : 0] CONTROL2;
+inout [35 : 0] CONTROL;
+input CLK;
+input [191 : 0] DATA;
+input [7 : 0] TRIG0;
+input [7 : 0] TRIG1;
+input [7 : 0] TRIG2;
+input [19 : 0] TRIG3;
 
 endmodule

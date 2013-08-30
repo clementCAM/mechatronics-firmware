@@ -426,23 +426,4 @@ assign IO2[3] = 0;
 assign IO2[5] = rx_d_led;
 assign IO2[7] = 0;
 
-
-
-//--------------------------------------------------------------
-// Debug: chipscope modules 
-//   icon: integrated controller
-//    ila: integrated logic analyzer
-
-wire[35:0] control0;
-
-chipscope_icon icon1(
-    .CONTROL0(control0)
-);
-
-chipscope_ila ila1(
-    .CONTROL(control0),
-    .CLK(sysclk),
-    .TRIG0(reg_addr)
-);
-
 endmodule
